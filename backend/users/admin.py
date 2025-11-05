@@ -1,0 +1,203 @@
+import pandas as pd
+from allauth.account.decorators import secure_admin_login
+from allauth.account.models import EmailAddress
+from django.conf import settings
+from django.contrib import admin
+from django.contrib import messages
+from django.contrib.auth import admin as auth_admin
+from django.db import transaction
+from django.http import HttpRequest
+from django.http import HttpResponseRedirect
+from django.template.response import TemplateResponse
+from django.urls import path
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+
+from backend.core.mixins import AccessControlAdminMixin
+
+from .forms import AdminUserRegistrationForm
+from .forms import UserAdminChangeForm
+from .forms import UserAdminCreationForm
+from .forms import UserBatchUploadForm
+from .models import User
+
+if settings.DJANGO_ADMIN_FORCE_ALLAUTH:
+    # Force the `admin` sign in process to go through the `django-allauth` workflow:
+    # https://docs.allauth.org/en/latest/common/admin.html#admin
+    admin.autodiscover()
+    admin.site.login = secure_admin_login(admin.site.login)  # type: ignore[method-assign]
+
+
+@admin.register(User)
+class UserAdmin(AccessControlAdminMixin, auth_admin.UserAdmin):
+    form = UserAdminChangeForm
+    add_form = UserAdminCreationForm
+    search_fields = [
+        "username",
+        "email",
+        "name",
+    ]
+    filter_horizontal = ["groups", "user_permissions"]
+
+    def get_list_display(self, request):
+        if request.user.is_superuser:
+            return [
+                "username",
+                "email",
+                "name",
+                "created_by",
+                "is_staff",
+                "is_superuser",
+                "date_joined",
+            ]
+        return ["username", "email", "name", "date_joined"]
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = []
+        if request.user.is_superuser:
+            fieldsets = (
+                (None, {"fields": ("username", "password")}),
+                (_("Personal info"), {"fields": ("name", "email")}),
+                (
+                    _("Permissions"),
+                    {
+                        "fields": (
+                            "is_active",
+                            "is_staff",
+                            "is_superuser",
+                            "groups",
+                            "user_permissions",
+                        ),
+                    },
+                ),
+                (
+                    _("Meta data"),
+                    {"fields": ("created_by", "last_login", "date_joined")},
+                ),
+            )
+        elif request.user.has_perm("users.can_manage_limited_users"):
+            fieldsets = (
+                (None, {"fields": ("username", "password")}),
+                (_("Personal info"), {"fields": ("name", "email")}),
+            )
+        return fieldsets
+
+    def get_list_filter(self, request):
+        if request.user.is_superuser:
+            return [
+                "is_active",
+                "is_staff",
+                "is_superuser",
+                "created_by",
+            ]
+        return []
+
+    def get_queryset(self, request):
+        return self.model.objects.accessible_by_user(request.user)
+
+    def has_add_permission(self, request: HttpRequest) -> bool:
+        """Disable the default add user button"""
+        return False
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "register/",
+                self.admin_site.admin_view(self.register_user_view),
+                name="user_register",
+            ),
+            path(
+                "batch-upload/",
+                self.admin_site.admin_view(self.batch_upload_view),
+                name="user_batch_upload",
+            ),
+        ]
+        return custom_urls + urls
+
+    def register_user_view(self, request):
+        if request.method == "POST":
+            form = AdminUserRegistrationForm(data=request.POST, staff_user=request.user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "User registered successfully.")
+                return HttpResponseRedirect(reverse("admin:users_user_changelist"))
+        else:
+            form = AdminUserRegistrationForm(staff_user=request.user)
+
+        context = {
+            "form": form,
+            "title": "Register New User",
+            **self.admin_site.each_context(request),
+        }
+        return TemplateResponse(request, "admin/users/user/register.html", context)
+
+    def batch_upload_view(self, request):
+        if request.method == "POST":
+            form = UserBatchUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                file = request.FILES["file"]
+                df_data = pd.read_excel(file, keep_default_na=False)
+                success_count = 0
+                errors = []
+
+                for idx, row in df_data.iterrows():
+                    try:
+                        with transaction.atomic():
+                            # Convert row to dictionary and handle missing columns
+                            row_dict = row.to_dict()
+
+                            # Create verified email address using form's save method
+                            form_data = {
+                                "email": row_dict["email"],
+                                "password": row_dict["password"],
+                                "name": row_dict.get("name"),
+                                "username": row_dict.get("username")
+                                or row_dict["email"],
+                            }
+                            temp_form = AdminUserRegistrationForm(
+                                data=form_data,
+                                staff_user=request.user,
+                            )
+                            if temp_form.is_valid():
+                                temp_form.save()
+                                success_count += 1
+                            else:
+                                errors.append(
+                                    f"Row {idx + 2}: {temp_form.errors.as_text()}",
+                                )
+                    except (KeyError, ValueError) as e:
+                        msg = f"Row {idx + 2}: {e!s}"
+                        errors.append(msg)
+
+                if success_count > 0:
+                    messages.success(
+                        request,
+                        f"Successfully created {success_count} users.",
+                    )
+                if errors:
+                    for error in errors:
+                        messages.error(request, error)
+                return HttpResponseRedirect(reverse("admin:users_user_changelist"))
+        else:
+            form = UserBatchUploadForm()
+
+        context = {
+            "form": form,
+            "title": "Batch Upload Users",
+            **self.admin_site.each_context(request),
+        }
+        return TemplateResponse(request, "admin/users/user/batch_upload.html", context)
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["show_register_button"] = True
+        extra_context["show_batch_upload_button"] = True
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def get_form(self, request, obj=None, change=False, **kwargs):  # noqa: FBT002
+        form_class = super().get_form(request, obj, **kwargs)
+        return lambda *args, **k: form_class(*args, **{**k, "staff_user": request.user})
+
+
+admin.site.unregister(EmailAddress)

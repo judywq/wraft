@@ -1,0 +1,52 @@
+<instructions>
+Here's an essay ("essay_text") with surface level corrections ("comments").
+For each corrected text span, there are start and end token positions, the corresponding correction and id.
+Based on the context, please add explanation why a certain correction is necessary.
+Return the data in JSON format containing only two fields: "id" and  "reason".
+The value in the "reason" field should first specify the error type in a short noun phrase, for example, "Missing preposition", "wrong verb form", etc.
+Please do not just copy and paste the ERRANT edit type.
+Then there should be a concise explanation of why the correction is necessary.
+Avoid adding very generic purpose of a edit such as "to improve grammatical flow".
+For spelling errors, there is no need for explanation.
+
+Requirements:
+1. The output should be in JSON format.
+2. The output should be in the same format as the output_data_structure.
+</instructions>
+
+<input_data_structure>
+{{
+  "essay_text": "...", // The essay text
+  "comments": [
+    {{
+      "id": "...", // The id of the comment
+      "start": "...", // The start word position of the correction
+      "end": "...", // The end word position of the correction
+      "highlighted_text": "...", // The original text
+      "corrected_text": "...", // The corrected text
+      "error_type": "...", // The type of the correction
+    }}
+    ...
+  ]
+}}
+</input_data_structure>
+
+<output_data_structure>
+{{
+  "comments": [
+    {{
+      "id": "...", // The id of the comment
+      "reason": "..." // The reason for the correction
+    }}
+    ...
+  ]
+}}
+</output_data_structure>
+
+Here's the input data:
+<input_data>
+  {{
+    "essay_text": {essay_text},
+    "comments": {comments}
+  }}
+</input_data>
