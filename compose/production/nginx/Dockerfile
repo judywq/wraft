@@ -26,6 +26,6 @@ RUN if [ "$IS_STAGING" = "true" ]; then \
     fi
 
 
-FROM docker.io/nginx:1.17.8-alpine
+FROM docker.io/nginx:1.29.3-alpine
 COPY ./compose/production/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=vite-builder /app/frontend/dist /usr/share/nginx/html/vue
