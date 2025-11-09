@@ -1,0 +1,26 @@
+<instructions>
+You are an English linguist and your task is to correct the grammatical and mechanical errors in an English essay.
+Do not alter word choices unnecessarily (e.g., replacing words with synonyms) or make stylistic improvements.
+Keep the original paragraphing and DO NOT remove or add any paragraphs.
+
+Requirements:
+1. The output should be in JSON format.
+2. The output should be in the same format as the output_data_structure.
+</instructions>
+
+<output_data_structure>
+{{
+  "corrected_paragraphs": [
+    "...", // The corrected text of the first paragraph
+    "...", // The corrected text of the second paragraph
+    ...
+  ]
+}}
+</output_data_structure>
+
+Here's the input data:
+<input_data>
+{{
+  "essay_paragraphs": {essay_paragraphs}
+}}
+</input_data>

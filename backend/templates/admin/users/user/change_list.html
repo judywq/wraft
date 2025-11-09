@@ -1,0 +1,25 @@
+{# User Change List Template #}
+{# This template extends the default admin change list to add custom action buttons #}
+{# for user registration and bulk import functionality #}
+{% extends "admin/change_list.html" %}
+
+{% load i18n admin_urls %}
+
+{% block object-tools-items %}
+  {# Register User button - shown conditionally based on user permissions #}
+  {# Allows admins to manually register a single new user #}
+  {% if show_register_button %}
+    <li>
+      <a href="{% url 'admin:user_register' %}" class="addlink">{% translate "Register User" %}</a>
+    </li>
+  {% endif %}
+  {# Import Users button - shown conditionally based on user permissions #}
+  {# Allows admins to bulk import users from an Excel file #}
+  {% if show_user_import_button %}
+    <li>
+      <a href="{% url 'admin:user_import' %}" class="addlink">{% translate "Import Users" %}</a>
+    </li>
+  {% endif %}
+  {# Include default admin change list tools (e.g., Add button) #}
+  {{ block.super }}
+{% endblock object-tools-items %}

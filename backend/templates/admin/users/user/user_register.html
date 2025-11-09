@@ -1,0 +1,24 @@
+{# User Registration Template #}
+{# This template provides a form for manually registering a new user in the admin interface #}
+{% extends "admin/base_site.html" %}
+
+{% load i18n static admin_urls %}
+
+{% block extrahead %}
+  {{ block.super }}
+{% endblock extrahead %}
+
+{% block content %}
+  {# Registration form container #}
+  <div class="register-form">
+    {# User registration form #}
+    <form method="post">
+      {% csrf_token %}
+      {# Render form fields as paragraphs #}
+      {{ form.as_p }}
+      <div class="submit-row">
+        <input type="submit" value="Register User" class="default" />
+      </div>
+    </form>
+  </div>
+{% endblock content %}

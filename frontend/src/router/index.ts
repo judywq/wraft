@@ -1,0 +1,131 @@
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import HomeView from '@/views/HomeView.vue'
+import EvaluationView from '@/views/EvaluationView.vue'
+
+const routes = [
+  {
+    path: '/',
+    component: () => import('@/layouts/BaseLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'home',
+        component: HomeView,
+      },
+      {
+        path: 'evaluate',
+        name: 'evaluate',
+        component: EvaluationView,
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: 'result/:id',
+        name: 'result',
+        component: () => import('@/views/ResultView.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: 'change-password',
+        name: 'change-password',
+        component: () => import('@/views/auth/ChangePasswordView.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: '/history',
+        name: 'history',
+        component: () => import('@/views/ResultListView.vue'),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+    ],
+  },
+  {
+    path: '/auth',
+    name: 'auth',
+    component: () => import('@/layouts/AuthLayout.vue'),
+    meta: {
+      requiresGuest: true,
+    },
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('@/views/auth/LoginView.vue'),
+      },
+      {
+        path: 'signup',
+        name: 'signup',
+        component: () => import('@/views/auth/SignupView.vue'),
+      },
+      {
+        path: 'verify-email',
+        name: 'verify-email',
+        component: () => import('@/views/auth/VerifyEmailView.vue'),
+      },
+      // Password Reset Flow
+      {
+        path: 'forgot-password',
+        name: 'forgot-password',
+        component: () => import('@/views/auth/ForgotPasswordView.vue'),
+      },
+      {
+        path: 'reset-password/:uid/:token',
+        name: 'reset-password',
+        component: () => import('@/views/auth/ResetPasswordView.vue'),
+      },
+      {
+        path: 'password-reset-sent',
+        name: 'password-reset-sent',
+        component: () => import('@/views/auth/PasswordResetSentView.vue'),
+      },
+    ],
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('@/views/NotFoundView.vue'),
+  },
+]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+})
+
+// Navigation guards
+router.beforeEach(async (to, from) => {
+  const authStore = useAuthStore()
+
+  // Check if the route requires authentication
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+
+  // Check if the route requires guest access
+  const requiresGuest = to.matched.some((record) => record.meta.requiresGuest)
+
+  // If the route requires authentication and user is not authenticated
+  if (requiresAuth && !authStore.isAuthenticated) {
+    // Redirect to login page with the intended destination
+    return {
+      name: 'login',
+      query: { redirect: to.fullPath },
+    }
+  }
+
+  // If the route requires guest access and user is authenticated
+  if (requiresGuest && authStore.isAuthenticated) {
+    // Redirect to evaluation or home
+    return {
+      name: 'evaluate',
+    }
+  }
+})
+
+export default router

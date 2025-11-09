@@ -1,0 +1,59 @@
+{# User Import Template #}
+{# This template provides a form for bulk importing users from an Excel file #}
+{% extends "admin/base_site.html" %}
+
+{% load i18n static admin_urls %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <style>
+    .upload-form {
+      max-width: 800px;
+      margin: 20px auto;
+    }
+
+    .upload-form .help-text {
+      margin: 20px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .required {
+      color: #dc3545;
+    }
+  </style>
+{% endblock extrahead %}
+
+{% block content %}
+  <div class="upload-form">
+    {# Instructions section explaining the Excel file format #}
+    <div class="help-text">
+      <h3>Bulk User Import Instructions</h3>
+      <p>Upload an Excel file (.xlsx) containing user data with the following columns:</p>
+      <ul>
+        <li>
+          <strong>email</strong> (<span class="required">required</span>): The user's email address, which will be used for login and notifications
+        </li>
+        <li>
+          <strong>password</strong> (<span class="required">required</span>): The user's initial password (will be hashed automatically)
+        </li>
+        <li>
+          <strong>name</strong> (<span class="required">required</span>): The user's full name or display name
+        </li>
+        <li>
+          <strong>username</strong> (optional): A unique username for the user. If not provided, the email address will be used as the username
+        </li>
+      </ul>
+      <p><strong>Note:</strong> Ensure all required fields are filled and email addresses are unique. Duplicate emails will result in import errors.</p>
+    </div>
+    {# File upload form with multipart encoding for file submission #}
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {# Render form fields as paragraphs #}
+      {{ form.as_p }}
+      <div class="submit-row">
+        <input type="submit" value="Import Users" class="default" />
+      </div>
+    </form>
+  </div>
+{% endblock content %}

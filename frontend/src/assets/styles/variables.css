@@ -1,0 +1,18 @@
+:root {
+  /* Combined colors from both files */
+  --highlight-color: rgba(135, 206, 250, 0.2);
+  --highlight-active-color: rgba(65, 105, 225, 0.3);
+  --error-color: rgba(255, 0, 0, 0.2);
+  --correction-color: rgba(0, 128, 0, 0.2);
+  --text-color: #333;
+  --secondary-color: #666;
+  --primary-color: #2c5282;
+  --border-color: #eee;
+  --connector-color: #ddd;
+
+  /* Type-specific colors */
+  --clarity-color: rgba(65, 105, 225, 0.2);
+  --formality-color: rgba(46, 139, 87, 0.2);
+  --coherence-color: rgba(255, 140, 0, 0.2);
+  --grammar-color: rgba(220, 20, 60, 0.2);
+}
