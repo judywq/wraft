@@ -1,0 +1,14 @@
+{
+  "comments": [
+    {
+      "id": 0,
+      "paragraph_id": 0,
+      "comment": "Your introduction paragraph effectively presents your stance on the topic, However, ..."
+    },
+    {
+      "id": 1,
+      "paragraph_id": 1,
+      "comment": "This paragraph begins with a clear topic sentence that ..."
+    },
+  ]
+}

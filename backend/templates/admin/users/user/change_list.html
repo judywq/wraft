@@ -1,0 +1,51 @@
+{# Admin: User Change List with Custom Tools #}
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls %}
+
+{# Style the object-tools area like a button bar #}
+{% block extrahead %}
+  {{ block.super }}
+  <style>
+    .object-tools{
+      gap:8px !important; display:flex; flex-wrap:wrap; align-items:center;
+    }
+    .object-tools li{ margin:0 !important; }
+    .object-tools a.action-pill{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid #334155; border-radius:999px; padding:8px 12px;
+      background:#0b1220; color:#e5e7eb; text-decoration:none;
+    }
+    .object-tools a.action-pill:hover{ border-color:#556; transform:translateY(-0.5px); }
+    .object-tools svg{ width:16px; height:16px; }
+    /* keep default Add button but make it match */
+    .object-tools .addlink{
+      border-radius:999px; padding:8px 12px;
+    }
+  </style>
+{% endblock %}
+
+{% block object-tools-items %}
+  {% if show_register_button %}
+    <li>
+      <a href="{% url 'admin:user_register' %}" class="action-pill">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        {% translate "Register User" %}
+      </a>
+    </li>
+  {% endif %}
+
+  {% if show_user_import_button %}
+    <li>
+      <a href="{% url 'admin:user_import' %}" class="action-pill">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        {% translate "Import Users" %}
+      </a>
+    </li>
+  {% endif %}
+
+  {{ block.super }}
+{% endblock object-tools-items %}

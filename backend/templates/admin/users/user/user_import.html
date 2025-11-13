@@ -1,0 +1,148 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static admin_urls %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <style>
+    :root{
+      --ink:#e5e7eb; --muted:#9aa7bd; --line:#24324d; --accent:#22d3ee; --accent-2:#7c3aed; --err:#ef4444;
+      --bg:#0b1020; --panel:#0f172a; --card:#111827;
+    }
+
+    body{ background:linear-gradient(180deg, var(--bg), #060910) fixed; }
+
+    .wrap{ max-width:960px; margin:24px auto; padding:0 16px; }
+    .lead{ color:var(--ink); display:flex; align-items:center; gap:10px; }
+    .lead small{ color:var(--muted); }
+
+    .panel{
+      border:1px solid var(--line); background:var(--card); border-radius:16px; overflow:hidden;
+      box-shadow:0 10px 30px rgba(2,6,23,.35);
+    }
+    .panel-hd{ padding:18px 20px; border-bottom:1px solid var(--line);
+      background:linear-gradient(90deg, rgba(34,211,238,.08), transparent); color:var(--ink);
+    }
+    .panel-bd{ padding:22px; color:#cbd5e1; }
+
+    .callout{
+      border:1px dashed #335; border-radius:12px; padding:14px 16px; background:rgba(15,23,42,.5);
+      margin-bottom:18px;
+    }
+    .callout h3{ margin:0 0 8px; font-size:15px; color:#e2e8f0; }
+    .callout ul{ margin:8px 0 0 18px; }
+    .required{ color:#f43f5e; font-weight:600; }
+
+    .drop{
+      position:relative; border:2px dashed #365; border-radius:14px;
+      padding:24px; text-align:center; background:rgba(30,41,59,.35);
+      transition:all .15s ease;
+    }
+    .drop.is-hover{ border-color:var(--accent); box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent); }
+    .drop h4{ margin:0 0 6px; color:#e2e8f0; }
+    .drop p{ margin:0; color:#9fb3d1; font-size:13px; }
+    .drop input[type=file]{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+
+    .row{
+      display:grid; gap:10px; grid-template-columns: 1fr 1fr; margin-top:18px;
+    }
+    .row > div{
+      border:1px solid #1e293b; border-radius:12px; padding:12px 14px; background:rgba(30,41,59,.25);
+    }
+
+    .errors{ color:var(--err); margin:8px 0; }
+    .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:18px; }
+
+    .btn{
+      border:1px solid #374151; background:#0b1220; color:#e5e7eb; padding:10px 14px; border-radius:10px;
+      text-decoration:none; cursor:pointer;
+    }
+    .btn-primary{
+      background:#0b1220;
+      border-color:#6d28d9;
+      color:#e5e7eb;
+    }
+    .btn-primary:hover{ border-color:#7c3aed; }
+    .btn:hover{ transform:translateY(-0.5px); }
+  </style>
+{% endblock extrahead %}
+
+{% block content %}
+  <div class="wrap">
+    <div class="lead">
+      <h1 style="margin:0; font-size:20px;">{% translate "Bulk User Import" %}</h1>
+      <small>· {% translate "Upload a .xlsx file with user records" %}</small>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hd">
+        <strong>{% translate "Upload & Validate" %}</strong>
+      </div>
+      <div class="panel-bd">
+        <div class="callout">
+          <h3>{% translate "File format" %}</h3>
+          <p>{% translate "Your Excel sheet must include the following columns:" %}</p>
+          <ul>
+            <li><strong>email</strong> (<span class="required">{% translate "required" %}</span>) — {% translate "unique login and notifications address" %}</li>
+            <li><strong>password</strong> (<span class="required">{% translate "required" %}</span>) — {% translate "initial password; will be hashed" %}</li>
+            <li><strong>name</strong> (<span class="required">{% translate "required" %}</span>) — {% translate "full name or display name" %}</li>
+            <li><strong>username</strong> {% translate "(optional)" %} — {% translate "defaults to email if omitted" %}</li>
+          </ul>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" id="import-form" novalidate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="errors">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <div class="drop" id="drop">
+            <input type="file" name="{{ form.file.html_name|default:'file' }}" accept=".xlsx" id="file-input">
+            <h4 id="file-label">{% translate "Drag & drop your .xlsx here" %}</h4>
+            <p>{% translate "or click to choose a file" %}</p>
+          </div>
+
+          <div class="row">
+            {% for field in form.visible_fields %}
+              {% if field.name != 'file' %}
+                <div>
+                  <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+                  {{ field }}
+                  {% if field.help_text %}<div style="font-size:12px; color:#8aa0be;">{{ field.help_text|safe }}</div>{% endif %}
+                  {% if field.errors %}<div class="errors">{{ field.errors }}</div>{% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+            {% for h in form.hidden_fields %}{{ h }}{% endfor %}
+          </div>
+
+          <div class="actions">
+            <a class="btn" href="{% url 'admin:users_user_changelist' %}">{% translate "Cancel" %}</a>
+            <button type="submit" class="btn btn-primary">{% translate "Import Users" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const drop = document.getElementById('drop');
+      const input = document.getElementById('file-input');
+      const label = document.getElementById('file-label');
+
+      const setName = file => { if(file){ label.textContent = file.name; } };
+
+      drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('is-hover'); });
+      drop.addEventListener('dragleave', () => drop.classList.remove('is-hover'));
+      drop.addEventListener('drop', e => {
+        e.preventDefault();
+        drop.classList.remove('is-hover');
+        if(e.dataTransfer.files && e.dataTransfer.files[0]){
+          input.files = e.dataTransfer.files;
+          setName(input.files[0]);
+        }
+      });
+      input.addEventListener('change', () => setName(input.files[0]));
+    })();
+  </script>
+{% endblock content %}

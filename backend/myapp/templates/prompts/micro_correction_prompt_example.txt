@@ -1,0 +1,22 @@
+{
+   "comments": [
+     {
+       "id": 0,
+       "paragraph_id": 0,
+       "start": 0,
+       "end": 2,
+       "highlighted_text": "abc",
+       "comment": "Your position statement contradicts the essay prompt. However, ...",
+       "type": "clarity"
+     },
+     {
+       "id": 1,
+       "paragraph_id": 0,
+       "start": 3,
+       "end": 5,
+       "highlighted_text": "def",
+       "comment": "This explanation ...,
+       "type": "formality"
+     },
+   ]
+ }

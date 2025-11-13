@@ -1,0 +1,120 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static admin_urls %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <style>
+    :root{
+      --ink:#0f172a; --muted:#64748b; --bg:#0b1020; --panel:#0f172a; --card:#111827;
+      --line:#23304a; --accent:#7c3aed; --accent-2:#22d3ee; --ok:#16a34a; --err:#ef4444;
+      --ring: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent);
+    }
+    body{ background:linear-gradient(180deg, var(--bg), #060910) fixed; }
+    .page-wrap{ max-width:960px; margin:24px auto; padding:0 16px; }
+    .header{
+      display:flex; align-items:center; gap:12px; margin:16px 0 20px;
+      color:#e5e7eb;
+    }
+    .header .badge{
+      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
+      font-size:12px; color:#a5b4fc; background:rgba(124,58,237,.08);
+    }
+    .card{
+      background:var(--card); border:1px solid var(--line); border-radius:14px;
+      box-shadow:0 10px 30px rgba(2,6,23,.35); overflow:hidden;
+    }
+    .card-head{
+      padding:18px 20px; border-bottom:1px solid var(--line);
+      background:linear-gradient(90deg, rgba(124,58,237,.08), transparent);
+      color:#e5e7eb;
+    }
+    .card-head h2{ margin:0; font-size:18px; letter-spacing:.2px; }
+    .card-body{ padding:22px; color:#cbd5e1; }
+
+    form .grid{
+      display:grid; gap:16px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .row{ grid-column: 1 / -1; display:grid; gap:8px;
+      grid-template-columns: 3fr 9fr; align-items:start;
+      padding:12px 14px; border:1px solid #1e293b; border-radius:12px;
+      background:rgba(30,41,59,.25);
+    }
+    .row:hover{ border-color:#2f3f67; background:rgba(30,41,59,.35); }
+    .row label{ color:#e2e8f0; font-weight:600; margin-top:2px; }
+    .field{ display:flex; flex-direction:column; gap:10px; }
+
+    input[type="text"], input[type="password"], input[type="email"],
+    input[type="number"], select, textarea{
+      padding:10px 12px; border:1px solid #334155; border-radius:10px;
+      background:#0b1220; color:#e5e7eb;
+    }
+    input:focus, select:focus, textarea:focus{
+      outline:none; border-color:var(--accent); box-shadow:var(--ring);
+    }
+
+    .help{ font-size:12px; color:#8aa0be; }
+    .errors{ color:var(--err); font-size:12px; line-height:1.4; }
+    .non-field-errors{ margin-bottom:16px; color:var(--err); }
+
+    .actions{
+      display:flex; gap:10px; justify-content:flex-end; margin-top:18px;
+    }
+    .btn{
+      border:1px solid #374151; background:#0b1220; color:#e5e7eb;
+      padding:10px 14px; border-radius:10px; text-decoration:none; cursor:pointer;
+    }
+    .btn:hover{ border-color:#4b5563; transform:translateY(-0.5px); }
+    .btn-primary{
+      background:#0b1220;
+      border-color:#6d28d9;
+      color:#e5e7eb;
+    }
+    .btn-primary:hover{ border-color:#7c3aed; }
+    @media (max-width: 880px){
+      .row{ grid-template-columns: 1fr; }
+    }
+  </style>
+{% endblock extrahead %}
+
+{% block content %}
+  <div class="page-wrap">
+    <div class="header">
+      <span class="badge">{% translate "Admin • User Ops" %}</span>
+      <h1 style="margin:0; font-size:20px;">{% translate "Register a New User" %}</h1>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>{% translate "Create account credentials and profile fields" %}</h2>
+      </div>
+      <div class="card-body">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="non-field-errors">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <div class="grid">
+            {% for field in form.visible_fields %}
+              <div class="row">
+                <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+                <div class="field">
+                  {{ field }}
+                  {% if field.help_text %}<div class="help">{{ field.help_text|safe }}</div>{% endif %}
+                  {% if field.errors %}<div class="errors">{{ field.errors }}</div>{% endif %}
+                </div>
+              </div>
+            {% endfor %}
+            {% for h in form.hidden_fields %}{{ h }}{% endfor %}
+          </div>
+
+          <div class="actions">
+            <a class="btn" href="{% url 'admin:users_user_changelist' %}">{% translate "Cancel" %}</a>
+            <button type="submit" class="btn btn-primary">{% translate "Register User" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
