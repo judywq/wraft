@@ -25,8 +25,8 @@ export class EssayService {
     essay_text,
     essay_prompt,
   }: {
-    essay_text: string,
-    essay_prompt: string,
+    essay_text: string
+    essay_prompt: string
   }): Promise<EssayRequest> {
     const response = await api.post<EssayRequest>('/evaluate-essay/', {
       essay_text,

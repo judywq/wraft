@@ -3,11 +3,10 @@
     <!-- Hero Section -->
     <section class="hero-section">
       <div class="hero-content">
-        <h1 class="hero-title">
-          Welcome to <span class="hero-title-highlight">WrAFT</span>
-        </h1>
+        <h1 class="hero-title">Welcome to <span class="hero-title-highlight">WrAFT</span></h1>
         <p class="hero-subtitle">
-          Writing Assessment and Feedback Tool is an AI-powered tool for assessing and providing feedback on your writing
+          Writing Assessment and Feedback Tool is an AI-powered tool for assessing and providing
+          feedback on your writing
         </p>
 
         <div class="feature-badges">
@@ -97,7 +96,12 @@
       <div class="section-container">
         <p class="funding-text">
           The development of WrAFT was funded by the
-          <a href="https://www.taf.or.jp/" target="_blank" rel="noopener noreferrer" class="funding-link">
+          <a
+            href="https://www.taf.or.jp/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="funding-link"
+          >
             Telecommunications Advancement Foundation in Japan
           </a>
         </p>

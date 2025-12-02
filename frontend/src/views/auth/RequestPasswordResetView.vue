@@ -2,9 +2,7 @@
   <Card class="mx-auto w-full sm:w-96">
     <CardHeader>
       <CardTitle class="text-2xl">Forgot Password</CardTitle>
-      <CardDescription>
-        Tell us your email and we'll send a reset link.
-      </CardDescription>
+      <CardDescription> Tell us your email and we'll send a reset link. </CardDescription>
     </CardHeader>
 
     <CardContent>
@@ -55,7 +53,14 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 
 // UI components (shadcn-vue style)
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'

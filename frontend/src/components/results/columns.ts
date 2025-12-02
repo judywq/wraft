@@ -10,8 +10,8 @@ export const columns: ColumnDef<EssayEvaluationDataBrief>[] = [
     enableSorting: false,
     header: ({ table }) => {
       return h(Checkbox, {
-        'ariaLabel': 'Select all rows',
-        'checked': table.getIsAllPageRowsSelected(),
+        ariaLabel: 'Select all rows',
+        checked: table.getIsAllPageRowsSelected(),
         'onUpdate:checked': (value: boolean) => {
           table.toggleAllPageRowsSelected(!!value)
         },
@@ -19,8 +19,8 @@ export const columns: ColumnDef<EssayEvaluationDataBrief>[] = [
     },
     cell: ({ row }) => {
       return h(Checkbox, {
-        'ariaLabel': 'Select row',
-        'checked': row.getIsSelected(),
+        ariaLabel: 'Select row',
+        checked: row.getIsSelected(),
         'onUpdate:checked': (value: boolean) => {
           row.toggleSelected(!!value)
         },

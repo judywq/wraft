@@ -23,10 +23,7 @@
 
           <!-- Signup Form -->
           <form @submit="onSubmit" class="signup-form">
-            <FormField
-              v-slot="{ componentField }"
-              name="email"
-            >
+            <FormField v-slot="{ componentField }" name="email">
               <FormItem>
                 <FormLabel class="form-label">
                   <span class="label-icon">📧</span>
@@ -45,10 +42,7 @@
               </FormItem>
             </FormField>
 
-            <FormField
-              v-slot="{ componentField }"
-              name="name"
-            >
+            <FormField v-slot="{ componentField }" name="name">
               <FormItem>
                 <FormLabel class="form-label">
                   <span class="label-icon">👤</span>
@@ -67,10 +61,7 @@
               </FormItem>
             </FormField>
 
-            <FormField
-              v-slot="{ componentField }"
-              name="password1"
-            >
+            <FormField v-slot="{ componentField }" name="password1">
               <FormItem>
                 <FormLabel class="form-label">
                   <span class="label-icon">🔒</span>
@@ -89,10 +80,7 @@
               </FormItem>
             </FormField>
 
-            <FormField
-              v-slot="{ componentField }"
-              name="password2"
-            >
+            <FormField v-slot="{ componentField }" name="password2">
               <FormItem>
                 <FormLabel class="form-label">
                   <span class="label-icon">🔐</span>
@@ -120,20 +108,13 @@
               class="signup-button"
               :disabled="loading || !form.meta.value.valid"
             >
-              <Loader2
-                v-if="loading"
-                class="mr-2 h-4 w-4 animate-spin"
-              />
+              <Loader2 v-if="loading" class="mr-2 h-4 w-4 animate-spin" />
               {{ loading ? 'Creating account...' : 'Create Account' }}
             </Button>
 
             <div class="login-prompt">
               Already have an account?
-              <router-link
-                :to="{ name: 'login' }"
-                class="login-link"
-                :tabindex="loading ? -1 : 0"
-              >
+              <router-link :to="{ name: 'login' }" class="login-link" :tabindex="loading ? -1 : 0">
                 Sign in
               </router-link>
             </div>
@@ -222,18 +203,22 @@ const onSubmit = form.handleSubmit(async (values) => {
 
 const signupWithGoogle = () => {
   // TODO: Implement Google OAuth signup
-  console.log('Google signup clicked');
-};
+  console.log('Google signup clicked')
+}
 
 const signupWithGithub = () => {
   // TODO: Implement GitHub OAuth signup
-  console.log('GitHub signup clicked');
-};
+  console.log('GitHub signup clicked')
+}
 </script>
 
 <style scoped>
 .signup-container {
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    'SF Pro Display',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   /* min-height: 100vh; */
   position: relative;
 }
@@ -255,17 +240,60 @@ const signupWithGithub = () => {
   animation: float 25s infinite ease-in-out;
 }
 
-.orb-1 { width: 100px; height: 100px; top: 15%; left: 8%; animation-delay: 0s; }
-.orb-2 { width: 60px; height: 60px; top: 70%; right: 20%; animation-delay: -8s; }
-.orb-3 { width: 80px; height: 80px; bottom: 20%; left: 15%; animation-delay: -15s; }
-.orb-4 { width: 120px; height: 120px; top: 40%; right: 10%; animation-delay: -5s; }
-.orb-5 { width: 40px; height: 40px; top: 60%; left: 50%; animation-delay: -12s; }
+.orb-1 {
+  width: 100px;
+  height: 100px;
+  top: 15%;
+  left: 8%;
+  animation-delay: 0s;
+}
+.orb-2 {
+  width: 60px;
+  height: 60px;
+  top: 70%;
+  right: 20%;
+  animation-delay: -8s;
+}
+.orb-3 {
+  width: 80px;
+  height: 80px;
+  bottom: 20%;
+  left: 15%;
+  animation-delay: -15s;
+}
+.orb-4 {
+  width: 120px;
+  height: 120px;
+  top: 40%;
+  right: 10%;
+  animation-delay: -5s;
+}
+.orb-5 {
+  width: 40px;
+  height: 40px;
+  top: 60%;
+  left: 50%;
+  animation-delay: -12s;
+}
 
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
-  25% { transform: translateY(-40px) rotate(90deg); opacity: 0.6; }
-  50% { transform: translateY(-20px) rotate(180deg); opacity: 0.4; }
-  75% { transform: translateY(-60px) rotate(270deg); opacity: 0.7; }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-40px) rotate(90deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-60px) rotate(270deg);
+    opacity: 0.7;
+  }
 }
 
 .main-container {
@@ -355,12 +383,16 @@ const signupWithGithub = () => {
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Header Text */
@@ -374,7 +406,7 @@ const signupWithGithub = () => {
   font-weight: 300;
   color: white;
   margin-bottom: 0.5rem;
-  text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
 }
 
 .signup-subtitle {

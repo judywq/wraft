@@ -6,7 +6,6 @@
     </div>
 
     <div class="main-container">
-
       <!-- Login Card -->
       <div class="login-section">
         <div class="login-card">
@@ -24,10 +23,7 @@
 
           <!-- Login Form -->
           <form @submit="onSubmit" class="login-form">
-            <FormField
-              v-slot="{ componentField }"
-              name="email"
-            >
+            <FormField v-slot="{ componentField }" name="email">
               <FormItem>
                 <FormLabel class="form-label">
                   <span class="label-icon">📧</span>
@@ -46,10 +42,7 @@
               </FormItem>
             </FormField>
 
-            <FormField
-              v-slot="{ componentField }"
-              name="password"
-            >
+            <FormField v-slot="{ componentField }" name="password">
               <FormItem>
                 <div class="label-row">
                   <FormLabel class="form-label">
@@ -57,7 +50,7 @@
                     Password
                   </FormLabel>
                   <router-link
-                    :to="{ name: 'forgot-password'}"
+                    :to="{ name: 'forgot-password' }"
                     class="forgot-link"
                     :tabindex="loading ? -1 : 0"
                   >
@@ -82,17 +75,13 @@
               class="login-button"
               :disabled="loading || !form.meta.value.valid"
             >
-              <Loader2
-                v-if="loading"
-                class="mr-2 h-4 w-4 animate-spin"
-              />
+              <Loader2 v-if="loading" class="mr-2 h-4 w-4 animate-spin" />
               {{ loading ? 'Logging in...' : 'Sign In' }}
             </Button>
 
             <div v-if="generalError" class="text-destructive text-sm">
               {{ generalError }}
             </div>
-
 
             <div class="signup-prompt">
               Don't have an account?
@@ -139,15 +128,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Loader2 } from 'lucide-vue-next';
-import { storeToRefs } from 'pinia';
-import { useForm } from 'vee-validate';
-import { toTypedSchema } from '@vee-validate/zod';
+import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Loader2 } from 'lucide-vue-next'
+import { storeToRefs } from 'pinia'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
 import {
   Form,
   FormControl,
@@ -155,13 +144,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '@/components/ui/form'
 import { loginFormSchema } from '@/lib/schema'
 
-const authStore = useAuthStore();
-const { loading } = storeToRefs(authStore);
-const router = useRouter();
-const route = useRoute();
+const authStore = useAuthStore()
+const { loading } = storeToRefs(authStore)
+const router = useRouter()
+const route = useRoute()
 
 const form = useForm({
   validationSchema: toTypedSchema(loginFormSchema),
@@ -169,45 +158,48 @@ const form = useForm({
     email: '',
     password: '',
   },
-});
+})
 
-const generalError = ref<string | null>(null);
+const generalError = ref<string | null>(null)
 
 const onSubmit = form.handleSubmit(async (values) => {
   try {
-    generalError.value = null;
-    await authStore.login(values.email, values.password);
+    generalError.value = null
+    await authStore.login(values.email, values.password)
 
     if (authStore.isAuthenticated) {
-      const redirectPath = typeof route.query.redirect === 'string'
-        ? route.query.redirect
-        : { name: 'evaluate' };
-      router.push(redirectPath);
+      const redirectPath =
+        typeof route.query.redirect === 'string' ? route.query.redirect : { name: 'evaluate' }
+      router.push(redirectPath)
     }
   } catch (err: any) {
     if (err.fieldErrors) {
       form.setErrors(err.fieldErrors)
     }
     if (err.nonFieldError) {
-      generalError.value = err.nonFieldError;
+      generalError.value = err.nonFieldError
     }
   }
-});
+})
 
 const loginWithGoogle = () => {
   // TODO: Implement Google OAuth login
-  console.log('Google login clicked');
-};
+  console.log('Google login clicked')
+}
 
 const loginWithGithub = () => {
   // TODO: Implement GitHub OAuth login
-  console.log('GitHub login clicked');
-};
+  console.log('GitHub login clicked')
+}
 </script>
 
 <style scoped>
 .login-container {
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    'SF Pro Display',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   /* min-height: 100vh; */
   position: relative;
 }
@@ -229,17 +221,60 @@ const loginWithGithub = () => {
   animation: float 25s infinite ease-in-out;
 }
 
-.orb-1 { width: 100px; height: 100px; top: 15%; left: 8%; animation-delay: 0s; }
-.orb-2 { width: 60px; height: 60px; top: 70%; right: 20%; animation-delay: -8s; }
-.orb-3 { width: 80px; height: 80px; bottom: 20%; left: 15%; animation-delay: -15s; }
-.orb-4 { width: 120px; height: 120px; top: 40%; right: 10%; animation-delay: -5s; }
-.orb-5 { width: 40px; height: 40px; top: 60%; left: 50%; animation-delay: -12s; }
+.orb-1 {
+  width: 100px;
+  height: 100px;
+  top: 15%;
+  left: 8%;
+  animation-delay: 0s;
+}
+.orb-2 {
+  width: 60px;
+  height: 60px;
+  top: 70%;
+  right: 20%;
+  animation-delay: -8s;
+}
+.orb-3 {
+  width: 80px;
+  height: 80px;
+  bottom: 20%;
+  left: 15%;
+  animation-delay: -15s;
+}
+.orb-4 {
+  width: 120px;
+  height: 120px;
+  top: 40%;
+  right: 10%;
+  animation-delay: -5s;
+}
+.orb-5 {
+  width: 40px;
+  height: 40px;
+  top: 60%;
+  left: 50%;
+  animation-delay: -12s;
+}
 
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
-  25% { transform: translateY(-40px) rotate(90deg); opacity: 0.6; }
-  50% { transform: translateY(-20px) rotate(180deg); opacity: 0.4; }
-  75% { transform: translateY(-60px) rotate(270deg); opacity: 0.7; }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-40px) rotate(90deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-60px) rotate(270deg);
+    opacity: 0.7;
+  }
 }
 
 .main-container {
@@ -328,12 +363,16 @@ const loginWithGithub = () => {
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Header Text */
@@ -347,7 +386,7 @@ const loginWithGithub = () => {
   font-weight: 300;
   color: white;
   margin-bottom: 0.5rem;
-  text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
 }
 
 .login-subtitle {

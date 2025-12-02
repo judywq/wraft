@@ -34,12 +34,12 @@ const startHistoryPolling = () => {
 
       // Update dialog content if open
       if (selectedRecord.value) {
-        const updatedRecord = results.find(r => r.id === selectedRecord.value?.id)
+        const updatedRecord = results.find((r) => r.id === selectedRecord.value?.id)
         if (updatedRecord) {
           selectedRecord.value = updatedRecord
         }
       }
-    }
+    },
   })
 }
 
@@ -50,7 +50,7 @@ async function loadData(page: number) {
     totalItems.value = response.count
 
     // Start polling if there are pending requests
-    if (response.results.some(r => r.status === 'PENDING' || r.status === 'PROCESSING')) {
+    if (response.results.some((r) => r.status === 'PENDING' || r.status === 'PROCESSING')) {
       startHistoryPolling()
     }
   } catch (error) {
@@ -86,15 +86,9 @@ onMounted(() => {
             <FileText class="result-list-title-icon" />
             Assessment Results
           </h1>
-          <p class="result-list-subtitle">
-            Click on a row to view detailed assessment results
-          </p>
+          <p class="result-list-subtitle">Click on a row to view detailed assessment results</p>
         </div>
-        <Button
-          @click="navigateToEvaluation"
-          class="new-evaluation-button"
-          size="lg"
-        >
+        <Button @click="navigateToEvaluation" class="new-evaluation-button" size="lg">
           <Plus class="button-icon" />
           Evaluate
         </Button>

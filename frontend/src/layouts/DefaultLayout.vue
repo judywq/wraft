@@ -1,22 +1,22 @@
 <script setup lang="ts">
 // Main layout for protected routes
-import { watchEffect } from 'vue';
-import { useRouter } from 'vue-router';
-import NavBar from '@/components/organisms/NavBar.vue';
-import { useAuthStore } from '@/stores/auth';
+import { watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
+import NavBar from '@/components/organisms/NavBar.vue'
+import { useAuthStore } from '@/stores/auth'
 
-const router = useRouter();
-const auth = useAuthStore();
+const router = useRouter()
+const auth = useAuthStore()
 
 // Protect routes that require authentication
 watchEffect(() => {
-  const currentRoute = router.currentRoute.value;
-  const needsAuth = currentRoute.meta.requiresAuth === true;
+  const currentRoute = router.currentRoute.value
+  const needsAuth = currentRoute.meta.requiresAuth === true
 
   if (needsAuth && !auth.isAuthenticated) {
-    router.push({ name: 'login' });
+    router.push({ name: 'login' })
   }
-});
+})
 </script>
 
 <template>

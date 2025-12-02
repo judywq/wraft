@@ -72,7 +72,6 @@
         Cancel
       </RouterLink>
     </CardFooter>
-    
   </Card>
 </template>
 
@@ -88,7 +87,14 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 
 // UI components
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
@@ -116,7 +122,11 @@ const onSubmit = handleSubmit(async (payload) => {
   ui.value.busy = true
   ui.value.error = null
   try {
-    await AuthService.changePassword(payload.old_password, payload.new_password1, payload.new_password2)
+    await AuthService.changePassword(
+      payload.old_password,
+      payload.new_password1,
+      payload.new_password2,
+    )
     ui.value.success = true
   } catch (e: any) {
     if (e?.fieldErrors) setErrors(e.fieldErrors)

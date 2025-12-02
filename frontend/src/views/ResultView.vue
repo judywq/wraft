@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <!-- View toggle buttons -->
     <div class="view-toggle-container">
       <button
@@ -66,10 +65,7 @@
       />
 
       <!-- Deep Level Feedback View -->
-      <DeepView
-        v-if="currentView === 'deep' && evaluationData"
-        :evaluation-data="evaluationData"
-      />
+      <DeepView v-if="currentView === 'deep' && evaluationData" :evaluation-data="evaluationData" />
 
       <!-- Corrected Essay View -->
       <CorrectedView
@@ -105,7 +101,7 @@ const evaluationData = computed(() => {
 })
 
 const viewSubtitle = computed(() => {
-  switch(currentView.value) {
+  switch (currentView.value) {
     case 'surface':
       return 'Surface Level Feedback'
     case 'deep':
@@ -145,7 +141,9 @@ const fetchEvaluationRequest = async (showLoading = true) => {
 
     // Check if the evaluation itself failed after successful API call
     if (evaluationRequest.value?.status === 'FAILED') {
-      error.value = evaluationRequest.value?.error || 'The evaluation process failed. Please try again or contact support.'
+      error.value =
+        evaluationRequest.value?.error ||
+        'The evaluation process failed. Please try again or contact support.'
       stopPolling() // Ensure polling stops if it was running
     }
   } catch (err) {
@@ -327,8 +325,12 @@ onUnmounted(() => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .error-container {

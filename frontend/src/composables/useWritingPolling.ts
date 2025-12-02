@@ -15,8 +15,8 @@ import type { EssayEvaluationDataBrief } from '@/models/writing'
 import { useToast } from '@/components/ui/toast/use-toast'
 
 // backoff tuning
-const INITIAL_DELAY = 500;   // 0.5s
-const CEILING_DELAY = 10_000; // 10s
+const INITIAL_DELAY = 500 // 0.5s
+const CEILING_DELAY = 10_000 // 10s
 
 type PollOptions = {
   pageSize: number
@@ -71,7 +71,9 @@ export function useWritingPolling() {
         }
 
         // 4) determine if we should continue polling (stop when no PENDING remain)
-        const pendingExists = results.some(r => r.status === 'PENDING' || r.status === 'PROCESSING')
+        const pendingExists = results.some(
+          (r) => r.status === 'PENDING' || r.status === 'PROCESSING',
+        )
         if (!pendingExists) {
           clearTimer()
           return
@@ -80,11 +82,11 @@ export function useWritingPolling() {
         // 5) schedule the next run with exponential backoff
         const delay = nextDelay(attempt)
         attempt += 1
-        // eslint-disable-next-line no-console
+         
         console.debug('[useWritingPolling] next poll in', delay, 'ms')
         timerId.value = setTimeout(tick, delay)
       } catch (err) {
-        // eslint-disable-next-line no-console
+         
         console.error('[useWritingPolling] polling error:', err)
 
         clearTimer()

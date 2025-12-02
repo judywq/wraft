@@ -18,12 +18,9 @@ const forwarded = computed(() => {
 <template>
   <RadixDropdownMenuLabel
     v-bind="forwarded"
-    :class="cn(
-      'px-2 py-1.5 text-sm font-semibold',
-      'text-white/90',
-      props.inset && 'pl-8',
-      props.class
-    )"
+    :class="
+      cn('px-2 py-1.5 text-sm font-semibold', 'text-white/90', props.inset && 'pl-8', props.class)
+    "
   >
     <slot />
   </RadixDropdownMenuLabel>

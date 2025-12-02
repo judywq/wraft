@@ -1,18 +1,18 @@
 <script setup lang="ts">
 // Layout for public auth pages (login, register, etc.)
-import { watchEffect } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
+import { watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
-const router = useRouter();
-const auth = useAuthStore();
+const router = useRouter()
+const auth = useAuthStore()
 
 // Send logged-in users to the app
 watchEffect(() => {
   if (auth.isAuthenticated) {
-    router.push({ name: 'evaluate' });
+    router.push({ name: 'evaluate' })
   }
-});
+})
 </script>
 
 <template>

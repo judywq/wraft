@@ -12,19 +12,19 @@
  */
 export interface User {
   /** Primary key (user ID) */
-  pk: number;
+  pk: number
 
   /** Username */
-  username: string;
+  username: string
 
   /** Email address */
-  email: string;
+  email: string
 
   /** First name (optional) */
-  first_name: string | null;
+  first_name: string | null
 
   /** Last name (optional) */
-  last_name: string | null;
+  last_name: string | null
 }
 
 /**
@@ -35,14 +35,14 @@ export interface User {
  */
 export interface AuthState {
   /** Current authenticated user (null if not authenticated) */
-  user: User | null;
+  user: User | null
 
   /** Whether user is currently authenticated */
-  isAuthenticated: boolean;
+  isAuthenticated: boolean
 
   /** Whether an async authentication operation is in progress */
-  loading: boolean;
+  loading: boolean
 
   /** Current error message (null if no error) */
-  error: string | null;
+  error: string | null
 }

@@ -10,7 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 import { Menu } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
@@ -24,12 +30,14 @@ const isAuthenticated = computed(() => authStore.isAuthenticated)
 const username = computed(() => authStore.user?.username || '')
 const userInitials = computed(() => {
   if (!username.value) return 'U'
-  return username.value
-    .split(' ')
-    .map(name => name[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2) || 'U'
+  return (
+    username.value
+      .split(' ')
+      .map((name) => name[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) || 'U'
+  )
 })
 
 // Navigation menu items
@@ -63,9 +71,7 @@ const isActiveRoute = (routeName: string) => {
   <header class="navbar-header">
     <!-- Desktop Navigation -->
     <nav class="navbar-desktop">
-      <router-link :to="{ name: 'home' }" class="navbar-brand">
-        WrAFT
-      </router-link>
+      <router-link :to="{ name: 'home' }" class="navbar-brand"> WrAFT </router-link>
 
       <div class="navbar-links">
         <router-link
@@ -165,9 +171,7 @@ const isActiveRoute = (routeName: string) => {
             </DropdownMenuItem>
           </template>
           <template v-else>
-            <DropdownMenuItem @click="router.push({ name: 'login' })">
-              🔑 Login
-            </DropdownMenuItem>
+            <DropdownMenuItem @click="router.push({ name: 'login' })"> 🔑 Login </DropdownMenuItem>
             <DropdownMenuItem @click="router.push({ name: 'signup' })">
               ✨ Sign up
             </DropdownMenuItem>

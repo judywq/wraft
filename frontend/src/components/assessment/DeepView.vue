@@ -54,7 +54,11 @@
               <span v-else class="text-segment" :key="`seg-${index}-${segIndex}-normal`">
                 {{ segment.text }}
               </span>
-              <span v-if="segIndex < getParagraphSegments(paragraph, index).length - 1" :key="`space-${index}-${segIndex}`">&nbsp;</span>
+              <span
+                v-if="segIndex < getParagraphSegments(paragraph, index).length - 1"
+                :key="`space-${index}-${segIndex}`"
+                >&nbsp;</span
+              >
             </template>
           </div>
         </div>
@@ -74,11 +78,7 @@
           </div>
           <!-- Display active comments -->
           <template v-else>
-            <div
-              v-for="comment in activeComments"
-              :key="comment.id"
-              class="comment-item"
-            >
+            <div v-for="comment in activeComments" :key="comment.id" class="comment-item">
               <div
                 class="comment-type"
                 :style="{ backgroundColor: getCommentTypeColor(comment.type) }"
@@ -126,23 +126,26 @@ const hasDeepComments = computed(() => {
 
 // Computed property specifically for micro comments
 const hasMicroComments = computed(() => {
-  return props.evaluationData?.deep?.micro_comments && props.evaluationData.deep.micro_comments.length > 0
+  return (
+    props.evaluationData?.deep?.micro_comments &&
+    props.evaluationData.deep.micro_comments.length > 0
+  )
 })
 
 const commentTypeColors = {
-  clarity: "rgba(65, 105, 225, 0.2)",
-  formality: "rgba(46, 139, 87, 0.2)",
-  coherence: "rgba(255, 140, 0, 0.2)",
-  grammar: "rgba(220, 20, 60, 0.2)",
-  default: "rgba(135, 206, 250, 0.2)"
+  clarity: 'rgba(65, 105, 225, 0.2)',
+  formality: 'rgba(46, 139, 87, 0.2)',
+  coherence: 'rgba(255, 140, 0, 0.2)',
+  grammar: 'rgba(220, 20, 60, 0.2)',
+  default: 'rgba(135, 206, 250, 0.2)',
 }
 
 const commentTypeActiveColors = {
-  clarity: "rgba(65, 105, 225, 0.4)",
-  formality: "rgba(46, 139, 87, 0.4)",
-  coherence: "rgba(255, 140, 0, 0.4)",
-  grammar: "rgba(220, 20, 60, 0.4)",
-  default: "rgba(65, 105, 225, 0.3)"
+  clarity: 'rgba(65, 105, 225, 0.4)',
+  formality: 'rgba(46, 139, 87, 0.4)',
+  coherence: 'rgba(255, 140, 0, 0.4)',
+  grammar: 'rgba(220, 20, 60, 0.4)',
+  default: 'rgba(65, 105, 225, 0.3)',
 }
 
 function getParagraphSegments(paragraphText: string, paragraphIndex: number) {
@@ -150,8 +153,8 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number) {
     return [{ text: paragraphText, comments: [], commentType: 'default' }]
   }
 
-  const micro_comments = props.evaluationData.deep.micro_comments.filter(comment =>
-    comment.paragraph_id === paragraphIndex
+  const micro_comments = props.evaluationData.deep.micro_comments.filter(
+    (comment) => comment.paragraph_id === paragraphIndex,
   )
 
   if (micro_comments.length === 0) {
@@ -161,7 +164,7 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number) {
   const wordCount = paragraphText.trim().split(/\s+/).length
   const breaks = new Set([0, wordCount])
 
-  micro_comments.forEach(comment => {
+  micro_comments.forEach((comment) => {
     if (comment.start !== undefined && comment.end !== undefined) {
       breaks.add(comment.start)
       breaks.add(comment.end)
@@ -177,9 +180,12 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number) {
     if (start === undefined || end === undefined) continue
     const text = wordSubstring(paragraphText, start, end)
 
-    const segmentComments = micro_comments.filter(comment =>
-      comment.start !== undefined && comment.end !== undefined &&
-      comment.start <= start && comment.end >= end
+    const segmentComments = micro_comments.filter(
+      (comment) =>
+        comment.start !== undefined &&
+        comment.end !== undefined &&
+        comment.start <= start &&
+        comment.end >= end,
     )
 
     segments.push({
@@ -187,7 +193,8 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number) {
       start,
       end,
       comments: segmentComments,
-      commentType: segmentComments.length > 0 && segmentComments[0] ? segmentComments[0].type : 'default'
+      commentType:
+        segmentComments.length > 0 && segmentComments[0] ? segmentComments[0].type : 'default',
     })
   }
 
@@ -207,13 +214,14 @@ function getCommentTypeColor(type: string) {
 function getSegmentBackgroundColor(segment: any) {
   const type = segment.commentType
   return isSegmentActive(segment)
-    ? commentTypeActiveColors[type as keyof typeof commentTypeActiveColors] || commentTypeActiveColors.default
+    ? commentTypeActiveColors[type as keyof typeof commentTypeActiveColors] ||
+        commentTypeActiveColors.default
     : commentTypeColors[type as keyof typeof commentTypeColors] || commentTypeColors.default
 }
 
 function isSegmentActive(segment: any) {
   return segment.comments.some((comment: any) =>
-    activeComments.value.some(activeComment => activeComment.id === comment.id)
+    activeComments.value.some((activeComment) => activeComment.id === comment.id),
   )
 }
 
@@ -242,9 +250,10 @@ function handleDeepClick(event: MouseEvent) {
     if (isDeepLocked.value) {
       const currentIds = comments.map((comment: any) => comment.id)
       const allCurrentActive = currentIds.every((id: string) =>
-        activeComments.value.some(comment => comment.id === id)
+        activeComments.value.some((comment) => comment.id === id),
       )
-      const onlyCurrentActive = activeComments.value.length === currentIds.length && allCurrentActive
+      const onlyCurrentActive =
+        activeComments.value.length === currentIds.length && allCurrentActive
 
       if (onlyCurrentActive) {
         isDeepLocked.value = false
@@ -265,7 +274,9 @@ function handleDeepMouseEnter(event: MouseEvent) {
 
   if (comments.length > 0 && !isDeepLocked.value) {
     activeComments.value = comments
-    target.style.backgroundColor = commentTypeActiveColors[commentType as keyof typeof commentTypeActiveColors] || commentTypeActiveColors.default
+    target.style.backgroundColor =
+      commentTypeActiveColors[commentType as keyof typeof commentTypeActiveColors] ||
+      commentTypeActiveColors.default
   }
 }
 
@@ -273,7 +284,8 @@ function handleDeepMouseLeave(event: MouseEvent) {
   const target = event.target as HTMLElement
   const commentType = target.dataset.commentType || 'default'
 
-  target.style.backgroundColor = commentTypeColors[commentType as keyof typeof commentTypeColors] || commentTypeColors.default
+  target.style.backgroundColor =
+    commentTypeColors[commentType as keyof typeof commentTypeColors] || commentTypeColors.default
 
   if (!isDeepLocked.value) {
     activeComments.value = []
@@ -518,8 +530,12 @@ function handleDeepMouseLeave(event: MouseEvent) {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Styles for the smaller loading container in the comment column */

@@ -108,13 +108,13 @@ export class AuthService {
     uid: string,
     token: string,
     new_password1: string,
-    new_password2: string
+    new_password2: string,
   ): Promise<AxiosResponse> {
     const response = await api.post('/dj-rest-auth/password/reset/confirm/', {
       uid,
       token,
       new_password1,
-      new_password2
+      new_password2,
     })
     return response
   }
@@ -142,7 +142,7 @@ export class AuthService {
   public static async changePassword(
     old_password: string,
     new_password1: string,
-    new_password2: string
+    new_password2: string,
   ): Promise<AxiosResponse> {
     const response = await api.post('/dj-rest-auth/password/change/', {
       old_password,

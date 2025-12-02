@@ -41,7 +41,12 @@
     color: #fff;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: #fff;
   }
 
@@ -50,7 +55,7 @@
     box-shadow: var(--card-shadow);
     border-radius: var(--radius);
     backdrop-filter: var(--card-blur);
-    border: 1.5px solid rgba(255,255,255,0.25);
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
     color: #fff;
   }
 
@@ -65,7 +70,7 @@
     justify-content: center;
     font-weight: 700;
     font-size: 1.1rem;
-    box-shadow: 0 2px 8px rgba(255,140,66,0.15);
+    box-shadow: 0 2px 8px rgba(255, 140, 66, 0.15);
     margin-right: 0.75rem;
   }
 
@@ -76,7 +81,7 @@
     padding: 0.2rem 0.8rem;
     font-weight: 600;
     font-size: 1rem;
-    box-shadow: 0 2px 8px rgba(67,233,123,0.15);
+    box-shadow: 0 2px 8px rgba(67, 233, 123, 0.15);
   }
 
   .main-title {
@@ -86,7 +91,7 @@
     margin-bottom: 0.5rem;
     color: #fff;
     text-align: center;
-    text-shadow: 0 2px 16px rgba(161,140,209,0.25);
+    text-shadow: 0 2px 16px rgba(161, 140, 209, 0.25);
   }
 
   .main-subtitle {
@@ -111,27 +116,31 @@
     font-weight: 600;
     font-size: 1.1rem;
     padding: 0.75rem 2rem;
-    box-shadow: 0 2px 8px rgba(161,140,209,0.15);
+    box-shadow: 0 2px 8px rgba(161, 140, 209, 0.15);
     border: none;
-    transition: background 0.2s, box-shadow 0.2s;
+    transition:
+      background 0.2s,
+      box-shadow 0.2s;
   }
   .modern-btn:hover {
     background: linear-gradient(90deg, #fbc2eb 0%, #a18cd1 100%);
-    box-shadow: 0 4px 16px rgba(161,140,209,0.25);
+    box-shadow: 0 4px 16px rgba(161, 140, 209, 0.25);
   }
 
-  .modern-input, .modern-textarea {
+  .modern-input,
+  .modern-textarea {
     border-radius: 1rem;
     border: 1.5px solid #e0e0e0;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255, 255, 255, 0.7);
     font-size: 1.1rem;
     padding: 0.75rem 1rem;
     margin-bottom: 0.5rem;
-    box-shadow: 0 1px 4px rgba(161,140,209,0.08);
+    box-shadow: 0 1px 4px rgba(161, 140, 209, 0.08);
     transition: border 0.2s;
     color: #fff;
   }
-  .modern-input:focus, .modern-textarea:focus {
+  .modern-input:focus,
+  .modern-textarea:focus {
     border: 1.5px solid #a18cd1;
     outline: none;
     color: #fff;

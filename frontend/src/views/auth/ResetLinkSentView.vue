@@ -3,7 +3,8 @@
     <CardHeader>
       <CardTitle class="text-2xl">Check your inbox</CardTitle>
       <CardDescription>
-        If an account is associated with that address, you'll receive a link to reset your password shortly.
+        If an account is associated with that address, you'll receive a link to reset your password
+        shortly.
       </CardDescription>
     </CardHeader>
 
@@ -11,7 +12,9 @@
       <p class="text-sm text-muted-foreground">
         Didn’t get the email? Check your spam folder or try again.
       </p>
-      <router-link :to="{ name: 'forgot-password' }" class="text-sm underline hover:no-underline">Resend reset link</router-link>
+      <router-link :to="{ name: 'forgot-password' }" class="text-sm underline hover:no-underline"
+        >Resend reset link</router-link
+      >
     </CardContent>
 
     <CardFooter class="justify-center">
@@ -28,6 +31,13 @@
  * - Purely presentational.
  * - Keeps the copy short and neutral.
  */
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 </script>

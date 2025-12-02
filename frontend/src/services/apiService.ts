@@ -11,12 +11,12 @@
  * @module api
  */
 
-import axios from 'axios';
-import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
-import Cookies from 'js-cookie';
-import { useAuthStore } from '@/stores/auth';
-import router from '@/router';
-import { AxiosError } from 'axios';
+import axios from 'axios'
+import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios'
+import Cookies from 'js-cookie'
+import { useAuthStore } from '@/stores/auth'
+import router from '@/router'
+import { AxiosError } from 'axios'
 
 // ============================================================================
 // Configuration
@@ -26,17 +26,17 @@ import { AxiosError } from 'axios';
  * API base URL from environment variables
  * Set via VITE_API_BASE_URL in .env file
  */
-const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL;
-console.debug('api.ts initialization - API_BASE_URL:', { API_BASE_URL });
+const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL
+console.debug('api.ts initialization - API_BASE_URL:', { API_BASE_URL })
 
 /**
  * CSRF token cookie key
  * Uses secure cookie name for HTTPS connections (browser security requirement)
  */
-let csrf_key = 'csrftoken';
+let csrf_key = 'csrftoken'
 if (window.location.protocol === 'https:') {
   // Secure cookies required for HTTPS to prevent XSS attacks
-  csrf_key = '__Secure-csrftoken';
+  csrf_key = '__Secure-csrftoken'
 }
 
 /**
@@ -53,7 +53,7 @@ const api: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-});
+})
 
 // ============================================================================
 // Request Interceptor
@@ -67,14 +67,14 @@ const api: AxiosInstance = axios.create({
  */
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const csrfToken = Cookies.get(csrf_key);
+    const csrfToken = Cookies.get(csrf_key)
     if (csrfToken && config.headers) {
-      config.headers['X-CSRFToken'] = csrfToken;
+      config.headers['X-CSRFToken'] = csrfToken
     }
-    return config;
+    return config
   },
-  (error: any) => Promise.reject(error)
-);
+  (error: any) => Promise.reject(error),
+)
 
 // ============================================================================
 // Type Definitions
@@ -85,10 +85,10 @@ api.interceptors.request.use(
  * Can contain field-specific errors or general error messages
  */
 export interface ApiErrorResponse {
-  non_field_errors?: string[];
-  detail?: string | string[];
-  error?: string | string[];
-  [key: string]: any; // Field-specific errors
+  non_field_errors?: string[]
+  detail?: string | string[]
+  error?: string | string[]
+  [key: string]: any // Field-specific errors
 }
 
 /**
@@ -96,10 +96,10 @@ export interface ApiErrorResponse {
  * Transforms API errors into a consistent format
  */
 export interface ApiError {
-  message: string; // Primary error message
-  code: string; // HTTP status code or error type
-  fieldErrors?: Record<string, string>; // Field-specific validation errors
-  nonFieldError?: string; // General error message
+  message: string // Primary error message
+  code: string // HTTP status code or error type
+  fieldErrors?: Record<string, string> // Field-specific validation errors
+  nonFieldError?: string // General error message
 }
 
 // ============================================================================
@@ -120,42 +120,38 @@ export interface ApiError {
 function handleApiError(error: AxiosError<ApiErrorResponse>): ApiError {
   // Server responded with error status (4xx, 5xx)
   if (error.response) {
-    const { data } = error.response;
-    const fieldErrors: Record<string, string> = {};
-    let nonFieldError: string | undefined;
+    const { data } = error.response
+    const fieldErrors: Record<string, string> = {}
+    let nonFieldError: string | undefined
 
     // Keys that indicate general/non-field errors
-    const nonFieldErrorKeys = [
-      'non_field_errors',
-      'detail',
-      'error'
-    ];
+    const nonFieldErrorKeys = ['non_field_errors', 'detail', 'error']
 
     // Process all error fields
     Object.entries(data).forEach(([key, value]) => {
       if (nonFieldErrorKeys.includes(key)) {
         // Handle general errors (can be string or array)
         if (Array.isArray(value)) {
-          nonFieldError = value[0];
+          nonFieldError = value[0]
         } else {
-          nonFieldError = value;
+          nonFieldError = value
         }
       } else {
         // Handle field-specific validation errors
         if (Array.isArray(value)) {
-          fieldErrors[key] = value[0]; // Take first error message
+          fieldErrors[key] = value[0] // Take first error message
         } else {
-          fieldErrors[key] = value;
+          fieldErrors[key] = value
         }
       }
-    });
+    })
 
     return {
       message: nonFieldError || 'An error occurred',
       code: error.response.status.toString(),
       fieldErrors: Object.keys(fieldErrors).length > 0 ? fieldErrors : undefined,
-      nonFieldError
-    };
+      nonFieldError,
+    }
   }
 
   // Network error: request made but no response received
@@ -163,16 +159,16 @@ function handleApiError(error: AxiosError<ApiErrorResponse>): ApiError {
     return {
       message: 'No response from server',
       code: 'NETWORK_ERROR',
-      nonFieldError: 'Network error. Please try again.'
-    };
+      nonFieldError: 'Network error. Please try again.',
+    }
   }
 
   // Request setup error: request was never sent
   return {
     message: error.message || 'An unexpected error occurred',
     code: 'REQUEST_ERROR',
-    nonFieldError: 'An unexpected error occurred. Please try again.'
-  };
+    nonFieldError: 'An unexpected error occurred. Please try again.',
+  }
 }
 
 // ============================================================================
@@ -187,24 +183,24 @@ function handleApiError(error: AxiosError<ApiErrorResponse>): ApiError {
  * - Transforms all errors to standardized ApiError format
  */
 api.interceptors.response.use(
-  response => response,
-  async error => {
+  (response) => response,
+  async (error) => {
     // Handle 403 Forbidden (authentication/authorization errors)
     if (error.response && error.response.status === 403) {
-      const { detail } = error.response.data;
+      const { detail } = error.response.data
 
       // Check if error is due to missing/invalid authentication credentials
       // Server returns messages like "Authentication credentials were not provided."
       if (detail && typeof detail === 'string' && detail.includes('credentials')) {
-        const authStore = useAuthStore();
-        await authStore.logout();
-        router.push({ name: 'login' });
+        const authStore = useAuthStore()
+        await authStore.logout()
+        router.push({ name: 'login' })
       }
     }
 
     // Transform error to standardized format and re-throw
-    throw handleApiError(error);
-  }
-);
+    throw handleApiError(error)
+  },
+)
 
-export default api;
+export default api

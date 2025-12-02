@@ -74,15 +74,17 @@
               :class="{ 'drag-active': dragActive }"
             >
               <div class="upload-icon">{{ dragActive ? '📥' : '📄' }}</div>
-              <p><strong>{{ dragActive ? 'Drop it here!' : 'Click to upload' }}</strong></p>
+              <p>
+                <strong>{{ dragActive ? 'Drop it here!' : 'Click to upload' }}</strong>
+              </p>
               <p class="upload-hint">Word files (.docx) or text files (.txt)</p>
               <input
                 ref="fileInput"
                 type="file"
-                style="display: none;"
+                style="display: none"
                 accept=".docx,.txt"
                 @change="handleFileUpload"
-              >
+              />
             </div>
           </div>
 
@@ -173,12 +175,7 @@ import { EssayService } from '@/services/writingService'
 import type { EssayRequest } from '@/models/writing'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form'
+import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { essayFormSchema, MAX_CHARS } from '@/lib/schema'
 
 // Router
@@ -217,7 +214,7 @@ const pollingInterval = ref<ReturnType<typeof setInterval> | null>(null)
 // Computed - Text statistics
 const charCount = computed(() => form.values.essay_text?.length || 0)
 const wordCount = computed(() => {
-  return form.values.essay_text?.split(/\s+/).filter(word => word.length > 0).length || 0
+  return form.values.essay_text?.split(/\s+/).filter((word) => word.length > 0).length || 0
 })
 const isOverLimit = computed(() => charCount.value > MAX_CHARS)
 
@@ -232,7 +229,7 @@ const canAnalyze = computed(() => {
     form.values.essay_prompt?.trim() &&
     assessmentType.value &&
     ((inputMethod.value === 'paste' && form.values.essay_text?.trim()) ||
-     (inputMethod.value === 'upload' && uploadedFile.value))
+      (inputMethod.value === 'upload' && uploadedFile.value))
   )
 })
 
@@ -360,17 +357,60 @@ onUnmounted(() => {
   animation: float 25s infinite ease-in-out;
 }
 
-.orb-1 { width: 100px; height: 100px; top: 15%; left: 8%; animation-delay: 0s; }
-.orb-2 { width: 60px; height: 60px; top: 70%; right: 20%; animation-delay: -8s; }
-.orb-3 { width: 80px; height: 80px; bottom: 20%; left: 15%; animation-delay: -15s; }
-.orb-4 { width: 120px; height: 120px; top: 40%; right: 10%; animation-delay: -5s; }
-.orb-5 { width: 40px; height: 40px; top: 60%; left: 50%; animation-delay: -12s; }
+.orb-1 {
+  width: 100px;
+  height: 100px;
+  top: 15%;
+  left: 8%;
+  animation-delay: 0s;
+}
+.orb-2 {
+  width: 60px;
+  height: 60px;
+  top: 70%;
+  right: 20%;
+  animation-delay: -8s;
+}
+.orb-3 {
+  width: 80px;
+  height: 80px;
+  bottom: 20%;
+  left: 15%;
+  animation-delay: -15s;
+}
+.orb-4 {
+  width: 120px;
+  height: 120px;
+  top: 40%;
+  right: 10%;
+  animation-delay: -5s;
+}
+.orb-5 {
+  width: 40px;
+  height: 40px;
+  top: 60%;
+  left: 50%;
+  animation-delay: -12s;
+}
 
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
-  25% { transform: translateY(-40px) rotate(90deg); opacity: 0.6; }
-  50% { transform: translateY(-20px) rotate(180deg); opacity: 0.4; }
-  75% { transform: translateY(-60px) rotate(270deg); opacity: 0.7; }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-40px) rotate(90deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-60px) rotate(270deg);
+    opacity: 0.7;
+  }
 }
 
 .main-container {
@@ -379,8 +419,8 @@ onUnmounted(() => {
   min-height: 100vh;
   display: grid;
   grid-template-areas:
-    "header"
-    "content";
+    'header'
+    'content';
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr;
   gap: 2rem;
@@ -456,7 +496,7 @@ onUnmounted(() => {
   justify-content: center;
   font-size: 2.5rem;
   margin: 0 auto 1rem;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 }
 
@@ -465,8 +505,12 @@ onUnmounted(() => {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .main-title {
@@ -474,7 +518,7 @@ onUnmounted(() => {
   font-size: 3rem;
   font-weight: 200;
   margin-bottom: 0.5rem;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .subtitle {
@@ -597,7 +641,8 @@ onUnmounted(() => {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.upload-section, .paste-section {
+.upload-section,
+.paste-section {
   flex: 1;
   margin-top: 1.5rem;
 }
@@ -612,7 +657,8 @@ onUnmounted(() => {
   color: white;
 }
 
-.upload-zone:hover, .upload-zone.drag-active {
+.upload-zone:hover,
+.upload-zone.drag-active {
   border-color: #74b9ff;
   background: rgba(116, 185, 255, 0.1);
 }
@@ -810,8 +856,14 @@ onUnmounted(() => {
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

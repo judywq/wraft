@@ -74,7 +74,14 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 
 // UI components
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
@@ -105,7 +112,12 @@ const onSubmit = handleSubmit(async (values) => {
   ui.value.busy = true
   ui.value.generalErr = null
   try {
-    await AuthService.passwordResetConfirm(route.params.uid as string, route.params.token as string, values.new_password1, values.new_password2)
+    await AuthService.passwordResetConfirm(
+      route.params.uid as string,
+      route.params.token as string,
+      values.new_password1,
+      values.new_password2,
+    )
     ui.value.done = true
   } catch (e: any) {
     if (e?.fieldErrors) setErrors(e.fieldErrors)

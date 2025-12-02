@@ -94,11 +94,9 @@ const dataTableInstance = useVueTable({
       return sortConfiguration.value
     },
   },
-  onPaginationChange: pageUpdater => {
+  onPaginationChange: (pageUpdater) => {
     currentPageState.value =
-      typeof pageUpdater === 'function'
-        ? pageUpdater(currentPageState.value)
-        : pageUpdater
+      typeof pageUpdater === 'function' ? pageUpdater(currentPageState.value) : pageUpdater
   },
   get data() {
     return componentProps.data
@@ -151,7 +149,7 @@ const executeDeletion = async () => {
   isDeletionModalVisible.value = false
 
   const chosenRows = dataTableInstance.getSelectedRowModel().rows
-  const itemIdentifiers = chosenRows.map(row => row.original.id)
+  const itemIdentifiers = chosenRows.map((row) => row.original.id)
 
   try {
     await EssayService.deleteEssays(itemIdentifiers)
@@ -198,11 +196,7 @@ const executeDeletion = async () => {
             :key="headerGroup.id"
             class="header-row"
           >
-            <TableHead
-              v-for="header in headerGroup.headers"
-              :key="header.id"
-              class="header-cell"
-            >
+            <TableHead v-for="header in headerGroup.headers" :key="header.id" class="header-cell">
               <FlexRender
                 v-if="!header.isPlaceholder"
                 :props="header.getContext()"
@@ -218,15 +212,8 @@ const executeDeletion = async () => {
             class="data-row"
             @click="(event: MouseEvent) => processRowInteraction(event, row.original)"
           >
-            <TableCell
-              v-for="cell in row.getVisibleCells()"
-              :key="cell.id"
-              class="data-cell"
-            >
-              <FlexRender
-                :props="cell.getContext()"
-                :render="cell.column.columnDef.cell"
-              />
+            <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id" class="data-cell">
+              <FlexRender :props="cell.getContext()" :render="cell.column.columnDef.cell" />
             </TableCell>
           </TableRow>
         </TableBody>
@@ -264,32 +251,21 @@ const executeDeletion = async () => {
     </div>
 
     <!-- Deletion confirmation modal -->
-    <Dialog
-      :open="isDeletionModalVisible"
-      @update:open="isDeletionModalVisible = false"
-    >
+    <Dialog :open="isDeletionModalVisible" @update:open="isDeletionModalVisible = false">
       <DialogContent class="deletion-modal">
         <DialogHeader>
           <DialogTitle>Confirm Deletion</DialogTitle>
           <DialogDescription>
             You are about to permanently delete
-            {{ activeSelectionCount }} {{ activeSelectionCount === 1 ? 'item' : 'items' }}.
-            This action cannot be reversed.
+            {{ activeSelectionCount }} {{ activeSelectionCount === 1 ? 'item' : 'items' }}. This
+            action cannot be reversed.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button
-            variant="outline"
-            @click="isDeletionModalVisible = false"
-            class="cancel-button"
-          >
+          <Button variant="outline" @click="isDeletionModalVisible = false" class="cancel-button">
             Cancel
           </Button>
-          <Button
-            variant="destructive"
-            @click="executeDeletion"
-            class="confirm-button"
-          >
+          <Button variant="destructive" @click="executeDeletion" class="confirm-button">
             Confirm Delete
           </Button>
         </DialogFooter>

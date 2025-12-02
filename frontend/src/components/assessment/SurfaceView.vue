@@ -34,7 +34,9 @@
     <div v-else-if="isCompleted && !hasSurfaceComments" class="completed-empty-container">
       <div class="completed-message">
         <p class="completed-title">Surface feedback completed</p>
-        <p class="completed-description">No surface-level corrections were found. Your essay looks good!</p>
+        <p class="completed-description">
+          No surface-level corrections were found. Your essay looks good!
+        </p>
       </div>
       <div class="content-layout">
         <div class="text-column">
@@ -46,9 +48,7 @@
         </div>
         <div class="comment-column">
           <div class="comment-sticky" id="surface-comment-container">
-            <div class="no-comment-message">
-              No surface-level corrections found
-            </div>
+            <div class="no-comment-message">No surface-level corrections found</div>
           </div>
         </div>
       </div>
@@ -60,8 +60,17 @@
         <div class="text-container" id="surface-text-container">
           <div v-for="(paragraph, index) in paragraphs" :key="index">
             <p :style="{ marginBottom: '1rem' }">
-              <span v-for="(segment, segIndex) in getParagraphSegments(paragraph, index)" :key="segIndex">
-                <template v-if="segment.comment && currentView === 'track-changes' && segment.comment.corrected_text">
+              <span
+                v-for="(segment, segIndex) in getParagraphSegments(paragraph, index)"
+                :key="segIndex"
+              >
+                <template
+                  v-if="
+                    segment.comment &&
+                    currentView === 'track-changes' &&
+                    segment.comment.corrected_text
+                  "
+                >
                   <span
                     class="error"
                     :data-comment-id="segment.comment.id"
@@ -87,7 +96,13 @@
                     {{ segment.comment.corrected_text }}
                   </span>
                 </template>
-                <template v-else-if="segment.comment && currentView === 'track-changes' && !segment.comment.corrected_text">
+                <template
+                  v-else-if="
+                    segment.comment &&
+                    currentView === 'track-changes' &&
+                    !segment.comment.corrected_text
+                  "
+                >
                   <span
                     class="error"
                     :data-comment-id="segment.comment.id"
@@ -134,7 +149,9 @@
                 <span v-else>
                   {{ segment.text }}
                 </span>
-                <span v-if="segIndex < getParagraphSegments(paragraph, index).length - 1">&nbsp;</span>
+                <span v-if="segIndex < getParagraphSegments(paragraph, index).length - 1"
+                  >&nbsp;</span
+                >
               </span>
             </p>
           </div>
@@ -150,7 +167,10 @@
             <div class="comparison-box">
               <span
                 class="error-box"
-                :style="{ fontStyle: isInsertion ? 'italic' : '', color: isInsertion ? '#999' : '' }"
+                :style="{
+                  fontStyle: isInsertion ? 'italic' : '',
+                  color: isInsertion ? '#999' : '',
+                }"
               >
                 {{ isInsertion ? '[No text]' : lockedComment.originalText }}
               </span>
@@ -249,17 +269,17 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number): Se
   }
 
   const comments = props.evaluationData.surface.comments
-    .filter(comment => {
+    .filter((comment) => {
       const startPos = comment.start
       const endPos = comment.end
       const paragraphStart = getParagraphStartPosition(paragraphIndex)
       const paragraphEnd = paragraphStart + paragraphText.trim().split(/\s+/).length
       return startPos >= paragraphStart && endPos <= paragraphEnd
     })
-    .map(comment => ({
+    .map((comment) => ({
       ...comment,
       wordStart: comment.start - getParagraphStartPosition(paragraphIndex),
-      wordEnd: comment.end - getParagraphStartPosition(paragraphIndex)
+      wordEnd: comment.end - getParagraphStartPosition(paragraphIndex),
     }))
 
   if (comments.length === 0) {
@@ -269,7 +289,7 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number): Se
   const wordCount = paragraphText.trim().split(/\s+/).length
   const breaks = new Set([0, wordCount])
 
-  comments.forEach(comment => {
+  comments.forEach((comment) => {
     breaks.add(comment.wordStart)
     breaks.add(comment.wordEnd)
   })
@@ -283,27 +303,27 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number): Se
     if (start === undefined || end === undefined) continue
     const text = wordSubstring(paragraphText, start, end)
 
-    const segmentComments = comments.filter(comment =>
-      comment.wordStart <= start && comment.wordEnd >= end
+    const segmentComments = comments.filter(
+      (comment) => comment.wordStart <= start && comment.wordEnd >= end,
     )
 
     segments.push({
       text,
       start,
       end,
-      comment: segmentComments.length > 0 ? segmentComments[0] : undefined
+      comment: segmentComments.length > 0 ? segmentComments[0] : undefined,
     })
   }
 
   // Insert insertion segments so that addition corrections are displayed in the text
-  const insertionComments = comments.filter(comment => comment.wordStart === comment.wordEnd)
-  insertionComments.forEach(comment => {
+  const insertionComments = comments.filter((comment) => comment.wordStart === comment.wordEnd)
+  insertionComments.forEach((comment) => {
     // Determine where to insert the empty-original segment for insertion
-    let insertionIndex = segments.findIndex(seg => seg.end === comment.wordStart)
+    let insertionIndex = segments.findIndex((seg) => seg.end === comment.wordStart)
     if (insertionIndex !== -1) {
       insertionIndex = insertionIndex + 1
     } else {
-      insertionIndex = segments.findIndex(seg => seg.start === comment.wordStart)
+      insertionIndex = segments.findIndex((seg) => seg.start === comment.wordStart)
       if (insertionIndex === -1) {
         insertionIndex = segments.length
       }
@@ -312,7 +332,7 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number): Se
       text: '',
       start: comment.wordStart,
       end: comment.wordEnd,
-      comment
+      comment,
     })
   })
 
@@ -374,7 +394,7 @@ function handleSurfaceClick(event: MouseEvent) {
       id: commentId,
       originalText,
       correctedText,
-      commentData
+      commentData,
     }
     isSurfaceLocked.value = true
   }
@@ -394,7 +414,7 @@ function handleSurfaceMouseEnter(event: MouseEvent) {
       id: commentId,
       originalText,
       correctedText,
-      commentData
+      commentData,
     }
   }
 }
@@ -601,8 +621,12 @@ function handleSurfaceMouseLeave(event: MouseEvent) {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .completed-empty-container {

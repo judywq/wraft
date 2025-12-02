@@ -17,10 +17,6 @@ const forwarded = computed(() => {
 <template>
   <RadixDropdownMenuSeparator
     v-bind="forwarded"
-    :class="cn(
-      '-mx-1 my-1 h-px',
-      'bg-white/10',
-      props.class
-    )"
+    :class="cn('-mx-1 my-1 h-px', 'bg-white/10', props.class)"
   />
 </template>

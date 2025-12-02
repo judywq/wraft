@@ -5,12 +5,12 @@
         <div class="not-found-number">404</div>
         <div class="not-found-icon">🔍</div>
       </div>
-      
+
       <h1 class="not-found-title">Page Not Found</h1>
       <p class="not-found-description">
         The page you're looking for doesn't exist or has been moved.
       </p>
-      
+
       <div class="not-found-actions">
         <router-link :to="{ name: 'home' }">
           <Button class="not-found-button" size="lg">
@@ -18,12 +18,7 @@
             Return Home
           </Button>
         </router-link>
-        <Button 
-          variant="outline" 
-          size="lg"
-          @click="$router.go(-1)"
-          class="not-found-button"
-        >
+        <Button variant="outline" size="lg" @click="$router.go(-1)" class="not-found-button">
           <span>←</span>
           Go Back
         </Button>
@@ -82,7 +77,8 @@ import { Button } from '@/components/ui/button'
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {

@@ -9,11 +9,7 @@
     <div v-else class="content-layout">
       <div class="text-column">
         <div class="text-container" id="corrected-text-container">
-          <div
-            v-for="(paragraph, index) in paragraphs"
-            :key="index"
-            class="text-paragraph"
-          >
+          <div v-for="(paragraph, index) in paragraphs" :key="index" class="text-paragraph">
             {{ paragraph }}
           </div>
         </div>
@@ -103,7 +99,11 @@ const hasCorrectedText = computed(() => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
