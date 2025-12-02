@@ -1,5 +1,5 @@
 // router/index.js
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteLocationNormalized, type RouteRecordNormalized } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 // ----- Route factories -----
@@ -95,8 +95,8 @@ const router = createRouter({
 })
 
 // ----- Navigation guards -----
-const needsAuth = (to) => to.matched.some((r) => r.meta?.requiresAuth)
-const needsGuest = (to) => to.matched.some((r) => r.meta?.requiresGuest)
+const needsAuth = (to: RouteLocationNormalized) => to.matched.some((r: RouteRecordNormalized) => r.meta?.requiresAuth)
+const needsGuest = (to: RouteLocationNormalized) => to.matched.some((r: RouteRecordNormalized) => r.meta?.requiresGuest)
 
 router.beforeEach((to) => {
   const { isAuthenticated } = useAuthStore()

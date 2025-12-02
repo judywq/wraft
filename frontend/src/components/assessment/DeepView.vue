@@ -174,9 +174,11 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number) {
   for (let i = 0; i < sortedBreaks.length - 1; i++) {
     const start = sortedBreaks[i]
     const end = sortedBreaks[i + 1]
+    if (start === undefined || end === undefined) continue
     const text = wordSubstring(paragraphText, start, end)
 
     const segmentComments = micro_comments.filter(comment =>
+      comment.start !== undefined && comment.end !== undefined &&
       comment.start <= start && comment.end >= end
     )
 
@@ -185,7 +187,7 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number) {
       start,
       end,
       comments: segmentComments,
-      commentType: segmentComments.length > 0 ? segmentComments[0].type : 'default'
+      commentType: segmentComments.length > 0 && segmentComments[0] ? segmentComments[0].type : 'default'
     })
   }
 

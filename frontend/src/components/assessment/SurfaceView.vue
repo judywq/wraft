@@ -280,6 +280,7 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number): Se
   for (let i = 0; i < sortedBreaks.length - 1; i++) {
     const start = sortedBreaks[i]
     const end = sortedBreaks[i + 1]
+    if (start === undefined || end === undefined) continue
     const text = wordSubstring(paragraphText, start, end)
 
     const segmentComments = comments.filter(comment =>
@@ -321,7 +322,10 @@ function getParagraphSegments(paragraphText: string, paragraphIndex: number): Se
 function getParagraphStartPosition(paragraphIndex: number) {
   let position = 0
   for (let i = 0; i < paragraphIndex; i++) {
-    position += paragraphs.value[i].trim().split(/\s+/).length
+    const paragraph = paragraphs.value[i]
+    if (paragraph) {
+      position += paragraph.trim().split(/\s+/).length
+    }
   }
   return position
 }
