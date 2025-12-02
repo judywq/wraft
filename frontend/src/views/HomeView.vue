@@ -91,6 +91,18 @@
         </div>
       </div>
     </section>
+
+    <!-- Funding Acknowledgment Section -->
+    <section class="funding-section">
+      <div class="section-container">
+        <p class="funding-text">
+          The development of WrAFT was funded by the
+          <a href="https://www.taf.or.jp/" target="_blank" rel="noopener noreferrer" class="funding-link">
+            Telecommunications Advancement Foundation in Japan
+          </a>
+        </p>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -394,5 +406,36 @@ import { Button } from '@/components/ui/button'
   color: rgba(255, 255, 255, 0.85);
   font-size: 0.9375rem;
   line-height: 1.6;
+}
+
+/* Funding Section */
+.funding-section {
+  padding: 3rem 0 2rem;
+  text-align: center;
+}
+
+.funding-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.funding-link {
+  color: #7bffec;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.funding-link:hover {
+  color: #a8fff5;
+  border-bottom-color: #a8fff5;
+}
+
+@media (min-width: 768px) {
+  .funding-text {
+    font-size: 1rem;
+  }
 }
 </style>
