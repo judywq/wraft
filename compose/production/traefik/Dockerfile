@@ -1,4 +1,4 @@
-FROM docker.io/traefik:3.2.1
+FROM docker.io/traefik:3.6.5
 
 RUN mkdir -p /etc/traefik/acme \
   && touch /etc/traefik/acme/acme.json \
