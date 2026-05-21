@@ -423,13 +423,13 @@ LLM_GATEWAY_INIT_LLM_CONFIGS = {
         "temperature": 0.7,
     },
     "macro_correction": {
-        "model": "anthropic/claude-3-7-sonnet-20250219",
+        "model": "anthropic/claude-sonnet-4-6",
         "template": "backend/myapp/templates/prompts/macro_correction_prompt.txt",
         "example_output": "backend/myapp/templates/prompts/macro_correction_prompt_example.txt",
         "temperature": 0.7,
     },
     "micro_correction": {
-        "model": "anthropic/claude-3-7-sonnet-20250219",
+        "model": "anthropic/claude-sonnet-4-6",
         "template": "backend/myapp/templates/prompts/micro_correction_prompt.txt",
         "example_output": "backend/myapp/templates/prompts/micro_correction_prompt_example.txt",
         "temperature": 0.7,
