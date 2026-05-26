@@ -18,6 +18,6 @@ RUN ls -la .
 
 RUN npm run build
 
-FROM docker.io/nginx:1.17.8-alpine
+FROM docker.io/nginx:1.29.5-alpine
 COPY ./compose/production/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=vite-builder /app/frontend/dist /usr/share/nginx/html/vue
